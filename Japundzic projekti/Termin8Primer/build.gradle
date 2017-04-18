@@ -1,0 +1,95 @@
+group 'Termin8Primer'
+version '1.0-SNAPSHOT'
+
+task prviTask {
+    description 'Moji prvi gradle task'
+    group 'Vezbe gradle'
+    println 'Hello gradle!'
+}
+
+task fazaKonfiguracije {
+    group 'Vezbe gradle'
+    description 'Sadrzi samo fazu konfiguracije'
+
+    println 'Ispisuje se cak i bez poziva taska konfiguracionaFaza'
+}
+
+task doLastPrimer << {
+    group 'Vezbe gradle'
+    description 'Sadrzi samo fazu konfiguracije'
+
+    println 'Ispisuje se tek kada se pozove ovaj task'
+}
+
+task fazaIzvrsavanja {
+    group 'Vezbe gradle'
+    description 'Sadrzi task u fazi izvrsavanja'
+
+    doFirst{
+        println 'doFirst se prvi ispisuje'
+    }
+
+    doLast{
+        println 'doLast se poslednji ispisuje'
+    }
+}
+/*
+ * Podrazumevani taskovi se izvrsavaju ako se eksplicitno ne navede task sa gradle komandom,
+ *odnosno kada se samo ukuca 'gradle'
+ */
+defaultTasks 'build'
+
+task clean << {
+    println 'Cleaning...'
+}
+
+task compile << {
+    println 'Compiling'
+}
+
+/*
+ * Dva nacina za odredjivanje redosleda: u definicija taska, ili nakon definicije taska
+*/
+
+task posleCompile(dependsOn: 'compile') << {
+    description 'Prvo izvrsava compile'
+    group 'Vezbe gradle'
+    println "Prvo compile"
+}
+
+task posleCleanCompile << {
+    description 'Prvo izvrsava clean i compile'
+    group 'Vezbe gradle'
+    println 'Prvo clean i compile'
+}
+
+posleCleanCompile.dependsOn clean, compile
+
+task deployJava << {
+    description 'Izvrsava se samo ako postoji deploy polje u projektu'
+    group 'Vezbe gradle'
+    println 'Deploy java project...'
+}
+
+
+apply plugin: 'java'
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.13'
+  distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+defaultTasks 'build'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile group: 'com.j256.ormlite', name: 'ormlite-core', version: '4.17'
+    compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
+
+}
+version '1.0-SNAPSHOT'
+

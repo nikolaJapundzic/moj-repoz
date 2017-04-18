@@ -1,0 +1,87 @@
+group 'MojProjekat'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+}
+
+/*task zdravo{
+    group "Pozdrav"
+    description "pozdrav na srpskom"
+
+    doLast{
+        println "Zdravo"
+    }
+}
+
+task hello{
+    group "Pozdrav"
+    description "pozdrav na engleskom"
+
+    doFirst{
+        println "Hello"
+    }
+    doLast{
+        println "World"
+    }
+}
+
+task hola << {
+    println "Hola"
+}*/
+
+
+task clean{
+    doFirst{
+        println "clean ucitan"
+        println "Cleaning..."
+    }
+}
+
+task compile {
+    println "Compiling ucitan"
+    doLast {
+        println "Compiling..."
+    }
+    compile.dependsOn clean
+}
+
+
+
+task build{
+    println "build ucitan"
+    doLast {
+        println "Building java..."
+
+    }
+    build.dependsOn compile
+}
+
+task test1{
+    println "test ucitan"
+    doLast {
+        println "Running tests..."
+
+    }
+    test1.dependsOn build
+
+}
+
+task deploy{
+    println "deploy ucitan"
+    doLast {
+        println "Deploying..."
+
+    }
+    deploy.dependsOn test1
+
+}
